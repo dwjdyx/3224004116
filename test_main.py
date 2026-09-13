@@ -169,5 +169,37 @@ class TestPaperCheck(unittest.TestCase):
 
         main()
 
+    #13. 文件不存在
+    def test_file_not_exist(self):
+        result = read_file(
+            "not_exist.txt"
+        )
+
+        self.assertEqual(
+            result,
+            ""
+        )
+
+    #14.空文本
+    def test_empty_ngram(self):
+        result = create_ngram("")
+
+        self.assertEqual(
+            len(result),
+            0
+        )
+
+    #15. 空抄袭文本
+    def test_empty_copy(self):
+        result = calculate_similarity(
+            "机器人控制系统",
+            ""
+        )
+
+        self.assertEqual(
+            result,
+            0
+        )
+
 if __name__ == "__main__":
     unittest.main()

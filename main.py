@@ -2,11 +2,27 @@ import sys
 import re
 
 def read_file(path):
-    """
-    读取文本文件
-    """
-    with open(path, "r", encoding="utf-8") as file:
-        return file.read()
+
+    try:
+        with open(
+            path,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
+            return f.read()
+
+    except FileNotFoundError:
+
+        print("文件不存在:", path)
+
+        return ""
+
+    except Exception as e:
+
+        print("读取文件失败:", e)
+
+        return ""
 
 def clean_text(text):
     """
@@ -24,12 +40,14 @@ def clean_text(text):
 def create_ngram(text):
 
     result = set()
+    add = result.add
+    length = len(text)
 
-    for n in [2,3]:
+    for i in range(length-1):
+        add(text[i:i+2])
 
-        for i in range(len(text)-n+1):
-
-            result.add(text[i:i+n])
+    for i in range(length-2):
+        add(text[i:i+3])
 
     return result
 
@@ -98,12 +116,24 @@ def main():
     answer = "{:.2f}".format(result)
 
     # 输出文件
-    with open(
-            output_path,
-            "w",
-            encoding="utf-8"
-    ) as file:
-        file.write(answer)
+    try:
+        with open(
+                output_path,
+                "w",
+                encoding="utf-8"
+        ) as f:
+            f.write(
+                "%.2f" % similarity
+            )
+
+    except Exception as e:
+
+        print(
+            "输出文件失败:",
+            e
+        )
+
+        return
 
     print("查重完成！")
     print("重复率:", answer)
